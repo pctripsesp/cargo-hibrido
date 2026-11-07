@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>¿Cargo o gasolina?</title>
+  <meta name="description" content="Decide al momento si compensa cargar tu híbrido enchufable o tirar de gasolina.">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cargo">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-green">
+  <!-- Vista principal -->
+  <main id="mainView" class="view">
+    <header class="topbar">
+      <h1>¿Cargo o gasolina?</h1>
+      <button id="openSettings" class="icon-btn" aria-label="Ajustes">⚙</button>
+    </header>
+
+    <p class="threshold-text">Compensa cargar hasta <strong id="thresholdValue">0,00 €</strong>/kWh</p>
+
+    <div id="dial" class="dial" tabindex="0" aria-label="Precio del cargador" role="slider"
+         aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+      <svg id="dialSvg" viewBox="-220 -220 440 440" aria-hidden="true">
+        <circle class="track" r="160"></circle>
+        <path id="arcGreen" class="arc arc-green"></path>
+        <path id="arcRed" class="arc arc-red"></path>
+        <g id="ticks"></g>
+        <g id="labels"></g>
+        <g id="thresholdMarker" class="th-marker">
+          <line id="thLine"></line>
+          <polygon id="thTri"></polygon>
+        </g>
+        <circle id="knob" class="knob" r="21"></circle>
+      </svg>
+
+      <button id="center" class="center" aria-label="Escribir precio">
+        <span class="c-label">Precio cargador</span>
+        <span class="c-price"><span id="priceValue">0,00</span></span>
+        <span class="c-unit">€/kWh</span>
+        <span id="verdict" class="c-verdict">CARGA</span>
+        <span id="savings" class="c-savings"></span>
+      </button>
+    </div>
+
+    <footer class="costs">
+      <div class="cost"><span class="cost-ico">⛽</span><span id="gasCost">0,00 €</span><small>/100 km</small></div>
+      <div class="cost"><span class="cost-ico">🔌</span><span id="elCost">0,00 €</span><small>/100 km</small></div>
+    </footer>
+  </main>
+
+  <!-- Ajustes -->
+  <section id="settingsView" class="view settings" hidden>
+    <header class="topbar">
+      <h1>Ajustes</h1>
+    </header>
+    <p id="firstRunNote" class="note" hidden>Configura tu coche una vez y listo. Podrás cambiarlo cuando quieras con ⚙.</p>
+    <form id="settingsForm" novalidate>
+      <label>Consumo gasolina
+        <span class="field"><input name="gasL" inputmode="decimal" autocomplete="off" required><em>L/100 km</em></span>
+      </label>
+      <label>Consumo eléctrico
+        <span class="field"><input name="kwh" inputmode="decimal" autocomplete="off" required><em>kWh/100 km</em></span>
+      </label>
+      <label>Precio gasolinera de referencia
+        <span class="field"><input name="gasPrice" inputmode="decimal" autocomplete="off" required><em>€/L</em></span>
+      </label>
+      <label>Pérdidas de carga
+        <span class="field"><input name="loss" inputmode="decimal" autocomplete="off" required><em>%</em></span>
+        <small class="hint">Energía del cargador que no llega a la batería (típico 10–15 %).</small>
+      </label>
+      <label>Máximo del dial
+        <span class="field"><input name="maxPrice" inputmode="decimal" autocomplete="off" required><em>€/kWh</em></span>
+      </label>
+      <p id="previewText" class="preview"></p>
+      <p id="formError" class="error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="cancelSettings" class="btn ghost">Cancelar</button>
+        <button type="submit" class="btn primary">Guardar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Introducir precio a mano -->
+  <dialog id="priceDialog">
+    <form method="dialog" id="priceForm">
+      <label>Precio del cargador
+        <span class="field"><input id="priceInput" inputmode="decimal" autocomplete="off"><em>€/kWh</em></span>
+      </label>
+      <div class="actions">
+        <button value="cancel" class="btn ghost" formnovalidate>Cancelar</button>
+        <button value="ok" class="btn primary">OK</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
